@@ -6,12 +6,12 @@ const app = express();
 
 app.use(json());
 
+app.use("/todos",todoRoutes);
+
 app.use((err: Error,req: Request,resp:Response,next:NextFunction) =>{
     resp
     .status(500)
     .json({message: err.message});
 });
-
-app.use("/todos",todoRoutes);
 
 app.listen(3000);

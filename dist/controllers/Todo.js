@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createTodo = void 0;
+exports.deleteTodos = exports.updateTodos = exports.getTodos = exports.createTodo = void 0;
 var Todo_1 = require("../model/Todo");
 var TODOS = [];
 exports.createTodo = function (req, res, next) {
@@ -13,4 +13,24 @@ exports.createTodo = function (req, res, next) {
         message: "Todo fue creado...",
         createTodo: newTodo
     });
+};
+exports.getTodos = function (req, res, next) {
+    res.json({ todos: TODOS });
+};
+exports.updateTodos = function (req, res, next) {
+    var todoId = req.params.id;
+    var updatedText = req.body.text;
+    var index = TODOS.findIndex(function (todo) { return todo.id == todoId; });
+    if (index < 0)
+        throw Error("Todo no fue encontrado...");
+    TODOS[index] = new Todo_1.Todo(TODOS[index].id, updatedText);
+    res.status(201).json({ message: "Actualizado", updateTodos: TODOS[index] });
+};
+exports.deleteTodos = function (req, res, next) {
+    var todoId = req.params.id;
+    var index = TODOS.findIndex(function (todo) { return todo.id == todoId; });
+    if (index < 0)
+        throw Error("Todo no fue encontrado...");
+    TODOS.splice(index, 1);
+    res.json({ message: "Eliminado" });
 };
